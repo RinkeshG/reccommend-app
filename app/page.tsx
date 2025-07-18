@@ -5,16 +5,20 @@ import { useState } from 'react'
 export default function HomePage() {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!email.trim()) {
-      alert('Please enter your email.')
+      setMessage('Please enter your email.')
+      setMessageType('error')
       return
     }
 
     setIsSubmitting(true)
+    setMessage('')
 
     try {
       const response = await fetch('/api/claim', {
@@ -26,15 +30,19 @@ export default function HomePage() {
       })
 
       if (response.ok) {
-        alert('🎉 You're on the list!')
+        setMessage('🎉 You\'re on the list!')
+        setMessageType('success')
         setEmail('')
       } else if (response.status === 409) {
-        alert('That email is already on the waitlist.')
+        setMessage('That email is already on the waitlist.')
+        setMessageType('error')
       } else {
-        alert('Oops — try again later.')
+        setMessage('Oops — try again later.')
+        setMessageType('error')
       }
     } catch (error) {
-      alert('Network error, please try again.')
+      setMessage('Network error, please try again.')
+      setMessageType('error')
     } finally {
       setIsSubmitting(false)
     }
@@ -121,6 +129,15 @@ export default function HomePage() {
                   )}
                 </button>
               </div>
+
+              {/* Message Display */}
+              {message && (
+                <p className={`mt-3 text-xs sm:text-sm text-center ${
+                  messageType === 'success' ? 'text-green-400' : 'text-red-400'
+                }`}>
+                  {message}
+                </p>
+              )}
 
               <p className="mt-3 text-xs sm:text-sm text-gray-400 text-center">
                 Signup to get early access
