@@ -1,103 +1,139 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import { useState } from 'react'
+
+export default function HomePage() {
+  const [email, setEmail] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!email.trim()) {
+      alert('Please enter your email.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch('/api/claim', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+
+      if (response.ok) {
+        alert('🎉 You're on the list!')
+        setEmail('')
+      } else if (response.status === 409) {
+        alert('That email is already on the waitlist.')
+      } else {
+        alert('Oops — try again later.')
+      }
+    } catch (error) {
+      alert('Network error, please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+      {/* Navigation */}
+      <header className="sticky top-0 backdrop-blur-md z-50 border-b border-gray-800/50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 flex items-center justify-between h-16">
+          <div className="flex items-center space-x-2">
+            <svg viewBox="0 0 100 100" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+              <text x="0" y="72" fontFamily="Lexend Deca, sans-serif" fontWeight="700" fontSize="80" fill="#ffffff">
+                r.
+              </text>
+            </svg>
+            <span className="font-bold text-lg sm:text-xl font-lexend">
+              Recommend
+            </span>
+          </div>
+          <button
+            onClick={() => {
+              document.getElementById('claimForm')?.scrollIntoView({ behavior: 'smooth' })
+            }}
+            className="px-4 sm:px-5 py-2 rounded-lg text-white text-sm sm:text-base font-medium shadow transition hover:brightness-110"
+            style={{ background: 'var(--accent)' }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            Get early access
+          </button>
         </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-grow">
+        {/* Hero Section */}
+        <section className="pt-20 sm:pt-28 lg:pt-32 pb-20 text-center">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 md:px-8">
+            <span className="inline-block bg-[#3fa7ff20] text-[#7dd3fc] px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold mb-6">
+              ✨ Currently in private beta
+            </span>
+
+            <h1 className="text-3xl sm:text-[2.6rem] md:text-[3.3rem] lg:text-[4rem] font-bold leading-tight sm:leading-[1.15] mb-7 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              Recommendations That Actually Matter.
+            </h1>
+
+            <p className="text-base sm:text-lg md:text-2xl text-gray-400 leading-relaxed mb-14 mx-auto max-w-[38rem]">
+              Curated by real people, from friends you trust, organized beautifully
+            </p>
+
+            {/* Email Form */}
+            <form 
+              id="claimForm"
+              onSubmit={handleSubmit}
+              className="mx-auto w-full max-w-[26rem] sm:max-w-[22rem] md:max-w-[24rem] lg:max-w-[28rem]"
+            >
+              <div className="flex h-12 items-center rounded-full bg-[#1a1a1d] shadow-[0_0_0_1px_#3fa7ff30_inset] overflow-hidden">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="you@example.com"
+                  className="flex-1 bg-transparent h-full px-4 text-sm sm:text-base placeholder-gray-500 focus:outline-none text-gray-200"
+                  disabled={isSubmitting}
+                />
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-shrink-0 w-9 h-9 my-1 mr-2 flex items-center justify-center rounded-full bg-[#565860] hover:bg-[#6c6d77] transition disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <span className="text-white text-xs">…</span>
+                  ) : (
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      className="h-4 w-4 stroke-white" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      strokeWidth="2"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
+
+              <p className="mt-3 text-xs sm:text-sm text-gray-400 text-center">
+                Signup to get early access
+              </p>
+            </form>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="py-6 text-center text-gray-600 text-xs border-t border-gray-800/50">
+        <p>Built with love. Curated with intention. © 2025 Recommend</p>
       </footer>
-    </div>
-  );
+    </>
+  )
 }
