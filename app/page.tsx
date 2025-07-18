@@ -84,7 +84,7 @@ export default function HomePage() {
               ✨ Currently in private beta
             </span>
 
-            <h1 className="text-3xl sm:text-[2.6rem] md:text-[3.3rem] lg:text-[4rem] font-bold leading-tight sm:leading-[1.15] mb-7 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-[2.6rem] md:text-[3.3rem] lg:text-[4rem] font-bold leading-tight sm:leading-[1.15] mb-7 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent font-lexend">
               Recommendations That Actually Matter.
             </h1>
 
