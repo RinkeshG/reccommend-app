@@ -49,26 +49,21 @@ export default function HomePage() {
   }
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
       {/* Navigation */}
-      <header className="sticky top-0 backdrop-blur-md z-50 border-b border-gray-800/50">
+      <header className="sticky top-0 backdrop-blur-md z-50 border-b border-gray-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <svg viewBox="0 0 100 100" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
-              <text x="0" y="72" fontFamily="Lexend Deca, sans-serif" fontWeight="700" fontSize="80" fill="#ffffff">
-                r.
-              </text>
-            </svg>
-            <span className="font-bold text-lg sm:text-xl font-lexend">
-              Recommend
-            </span>
+            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+              r
+            </div>
+            <span className="font-bold text-xl">Recommend</span>
           </div>
           <button
             onClick={() => {
               document.getElementById('claimForm')?.scrollIntoView({ behavior: 'smooth' })
             }}
-            className="px-4 sm:px-5 py-2 rounded-lg text-white text-sm sm:text-base font-medium shadow transition hover:brightness-110"
-            style={{ background: 'var(--accent)' }}
+            className="px-5 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-medium transition"
           >
             Get early access
           </button>
@@ -78,17 +73,17 @@ export default function HomePage() {
       {/* Main Content */}
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="pt-20 sm:pt-28 lg:pt-32 pb-20 text-center">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 md:px-8">
-            <span className="inline-block bg-[#3fa7ff20] text-[#7dd3fc] px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold mb-6">
+        <section className="pt-32 pb-20 text-center">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8">
+            <div className="inline-block bg-blue-500 bg-opacity-20 text-blue-300 px-4 py-2 rounded-full text-sm font-semibold mb-8">
               ✨ Currently in private beta
-            </span>
+            </div>
 
-            <h1 className="text-3xl sm:text-[2.6rem] md:text-[3.3rem] lg:text-[4rem] font-bold leading-tight sm:leading-[1.15] mb-7 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent font-lexend">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-8 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               Recommendations That Actually Matter.
             </h1>
 
-            <p className="text-base sm:text-lg md:text-2xl text-gray-400 leading-relaxed mb-14 mx-auto max-w-[38rem]">
+            <p className="text-xl sm:text-2xl text-gray-400 leading-relaxed mb-16 mx-auto max-w-2xl">
               Curated by real people, from friends you trust, organized beautifully
             </p>
 
@@ -96,32 +91,33 @@ export default function HomePage() {
             <form 
               id="claimForm"
               onSubmit={handleSubmit}
-              className="mx-auto w-full max-w-[26rem] sm:max-w-[22rem] md:max-w-[24rem] lg:max-w-[28rem]"
+              className="mx-auto w-full max-w-md"
             >
-              <div className="flex h-12 items-center rounded-full bg-[#1a1a1d] shadow-[0_0_0_1px_#3fa7ff30_inset] overflow-hidden">
+              <div className="flex h-14 items-center rounded-full bg-gray-800 border border-gray-700 overflow-hidden">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="you@example.com"
-                  className="flex-1 bg-transparent h-full px-4 text-sm sm:text-base placeholder-gray-500 focus:outline-none text-gray-200"
+                  className="flex-1 bg-transparent h-full px-6 text-base placeholder-gray-400 focus:outline-none text-white"
                   disabled={isSubmitting}
                 />
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-shrink-0 w-9 h-9 my-1 mr-2 flex items-center justify-center rounded-full bg-[#565860] hover:bg-[#6c6d77] transition disabled:opacity-50"
+                  className="flex-shrink-0 w-10 h-10 my-2 mr-2 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600 transition disabled:opacity-50"
                 >
                   {isSubmitting ? (
-                    <span className="text-white text-xs">…</span>
+                    <span className="text-white">...</span>
                   ) : (
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 
-                      className="h-4 w-4 stroke-white" 
+                      className="h-5 w-5 text-white" 
                       fill="none" 
                       viewBox="0 0 24 24" 
+                      stroke="currentColor"
                       strokeWidth="2"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
@@ -132,14 +128,14 @@ export default function HomePage() {
 
               {/* Message Display */}
               {message && (
-                <p className={`mt-3 text-xs sm:text-sm text-center ${
+                <p className={`mt-4 text-sm text-center ${
                   messageType === 'success' ? 'text-green-400' : 'text-red-400'
                 }`}>
                   {message}
                 </p>
               )}
 
-              <p className="mt-3 text-xs sm:text-sm text-gray-400 text-center">
+              <p className="mt-4 text-sm text-gray-400 text-center">
                 Signup to get early access
               </p>
             </form>
@@ -148,9 +144,9 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 text-center text-gray-600 text-xs border-t border-gray-800/50">
+      <footer className="py-8 text-center text-gray-500 text-sm border-t border-gray-800">
         <p>Built with love. Curated with intention. © 2025 Recommend</p>
       </footer>
-    </>
+    </div>
   )
 }
